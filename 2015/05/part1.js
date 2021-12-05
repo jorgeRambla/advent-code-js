@@ -1,12 +1,11 @@
-const crypto = require("crypto");
-const secret = require("./input");
+const { input } = require("./io");
+const vowels = /[aeiou]/g;
+const validateRegex = /(\w)\1+/;
+const forbiddenChars = /(ab|cd|pq|xy)/g;
 
-let index = 0;
-let hash;
-do {
-  hash = crypto.createHash("md5").update(`${secret}${index}`).digest("hex");
-  index++;
-  if (index % 50 === 0) console.log(index);
-} while (hash.substr(0, 5) !== "00000");
+const result = input
+  .filter((element) => (element.match(vowels) || []).length >= 3)
+  .filter((element) => element.match(validateRegex))
+  .filter((element) => !element.match(forbiddenChars));
 
-console.info(`Santa, i fount the secret number: ${index - 1}`);
+console.info(`There are ${result.length} nice strings!`);
